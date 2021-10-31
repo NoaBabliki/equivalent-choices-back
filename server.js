@@ -65,11 +65,9 @@ function setCategoryInfo(client_categories){
     let category_client_arr1 = JSON.parse(client_categories[0]) 
     let category_client_arr2 = JSON.parse(client_categories[1])
     if ((category_client_arr1.length > 0) && (category1_to_send !== category_client_arr1)){
-        //console.log('we are in 1')
         category1_to_send = category_client_arr1
     }
     if ((category_client_arr2.length > 0) && (category2_to_send !== category_client_arr2)){
-        //console.log('we are in 2')
         category2_to_send = category_client_arr2
     }
 }
@@ -77,24 +75,22 @@ function setCategoryInfo(client_categories){
 function choisesStringToObjects(equivalent_choices){
     let ec_arr = []
     for (let i = 0; i < equivalent_choices.length; i++){
-        //console.log(equivalent_choices[i])
         let temp = JSON.parse(equivalent_choices[i])
         ec_arr.push(temp)
     }
-    //console.log('ec_arr', ec_arr)
     return ec_arr
 }
 
 app.get(CHOICES_API_PATH, function(req, res){
     const equivalent_choices = req.query.equivalent_choices 
-    //console.log('before parse', equivalent_choices)
     save_to_file(FINAL_OUTPUT, choisesStringToObjects(equivalent_choices))
     res.send(equivalent_choices)
 })
 
 app.get(API_PATH, function(req, res){
     const client_categories = req.query.client_categories
-    if (client_categories === ["[]", "[]"]) {
+    if (client_categories[0] === '[]') {
+        console.log('restart')
         category1_to_send = stringToJson(data1.split('\r\n').filter(s => s))
         category2_to_send = stringToJson(data2.split('\r\n').filter(s => s))
     }
