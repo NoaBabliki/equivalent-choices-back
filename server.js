@@ -39,10 +39,8 @@ function stringToJson(str_arr){
 
 function save_client_choices(client_categories){
     const files = [OUTPUT_1, OUTPUT_2]
-    //console.log("client categories length:", client_categories.length)
     for (var i = 0; i < client_categories.length; i++) {
         const category = JSON.parse(client_categories[i])
-        //console.log(category)
         if (category.length > 1) {
             save_to_file(files[i], category)
         } 
@@ -96,15 +94,13 @@ app.get(CHOICES_API_PATH, function(req, res){
 
 app.get(API_PATH, function(req, res){
     const client_categories = req.query.client_categories
-    if (client_categories){
-        console.log("not restart")
-        console.log(client_categories)
-        save_client_choices(client_categories)
-        setCategoryInfo(client_categories)
-    }
-    else{
+    if (client_categories === ["[]", "[]"]) {
         category1_to_send = stringToJson(data1.split('\r\n').filter(s => s))
         category2_to_send = stringToJson(data2.split('\r\n').filter(s => s))
+    }
+    else if (client_categories){
+        save_client_choices(client_categories)
+        setCategoryInfo(client_categories)
     }
     res.send([category1_to_send, category2_to_send])
 })
