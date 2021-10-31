@@ -96,11 +96,12 @@ app.get(CHOICES_API_PATH, function(req, res){
 
 app.get(API_PATH, function(req, res){
     const client_categories = req.query.client_categories
-    if (client_categories){
+    if (client_categories === [[],[]]){
+        console.log("restart")
+    }
+    else if (client_categories){
         save_client_choices(client_categories)
-    //console.log('category 1 before changing',category1_to_send)
         setCategoryInfo(client_categories)
-    //console.log('category 1 after changing',category1_to_send)
     }
     res.send([category1_to_send, category2_to_send])
 })
